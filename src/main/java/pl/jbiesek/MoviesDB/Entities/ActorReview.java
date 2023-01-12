@@ -1,5 +1,6 @@
 package pl.jbiesek.MoviesDB.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -25,10 +26,26 @@ public class ActorReview {
     @Column(name = "date_added")
     private Date date_added;
 
-    public ActorReview(String title, String description, Date date_added) {
+    @Column(name = "rating")
+    private float rating;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "actor_id", nullable = false)
+    @JsonIgnoreProperties("actorsList")
+    private Actor actor;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties("usersList")
+    private User user;
+
+    public ActorReview(String title, String description, Date date_added, float rating, Actor actor, User user) {
         this.title = title;
         this.description = description;
         this.date_added = date_added;
+        this.rating = rating;
+        this.actor = actor;
+        this.user = user;
     }
 
     public int getId() {
@@ -61,5 +78,29 @@ public class ActorReview {
 
     public void setDate_added(Date date_added) {
         this.date_added = date_added;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public Actor getActor() {
+        return actor;
+    }
+
+    public void setActor(Actor actor) {
+        this.actor = actor;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

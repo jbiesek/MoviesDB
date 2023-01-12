@@ -1,10 +1,13 @@
 package pl.jbiesek.MoviesDB.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -29,11 +32,38 @@ public class Director {
     @Column(name = "country")
     private String country;
 
+    @OneToMany(
+            mappedBy = "director",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
+    @JsonIgnoreProperties("director")
+    private List<DirectorReview> directorReviews = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "director",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
+    @JsonIgnoreProperties("director")
+    private List<Movie> movies = new ArrayList<>();
+
     public Director(String name, String surname, Date birth_date, String country) {
         this.name = name;
         this.surname = surname;
         this.birth_date = birth_date;
         this.country = country;
+    }
+
+    public Director(String name, String surname, Date birth_date, String country, List<DirectorReview> directorReviews, List<Movie> movies) {
+        this.name = name;
+        this.surname = surname;
+        this.birth_date = birth_date;
+        this.country = country;
+        this.directorReviews = directorReviews;
+        this.movies = movies;
     }
 
     public int getId() {
@@ -74,5 +104,21 @@ public class Director {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public List<DirectorReview> getDirectorReviews() {
+        return directorReviews;
+    }
+
+    public void setDirectorReviews(List<DirectorReview> directorReviews) {
+        this.directorReviews = directorReviews;
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
     }
 }
