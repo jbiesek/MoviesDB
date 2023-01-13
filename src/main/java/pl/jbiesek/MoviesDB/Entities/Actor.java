@@ -43,11 +43,14 @@ public class Actor {
     @JsonIgnoreProperties("actor")
     private List<ActorReview> actorReviews = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "actors_movies",
-            joinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"))
-    private Set<Movie> movies = new java.util.LinkedHashSet<>();
+    @OneToMany(
+            mappedBy = "actor",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
+    @JsonIgnoreProperties("actor")
+    private List<ActorMovie> actorMovies = new ArrayList<>();
 
 
     public Actor(String name, String surname, Date birth_date, String country) {
@@ -58,13 +61,13 @@ public class Actor {
     }
 
 
-    public Actor(String name, String surname, Date birth_date, String country, List<ActorReview> actorReviews, Set<Movie> movies) {
+    public Actor(String name, String surname, Date birth_date, String country, List<ActorReview> actorReviews, List<ActorMovie> actorMovies) {
         this.name = name;
         this.surname = surname;
         this.birth_date = birth_date;
         this.country = country;
         this.actorReviews = actorReviews;
-        this.movies = movies;
+        this.actorMovies = actorMovies;
     }
 
     public int getId() {
@@ -115,11 +118,11 @@ public class Actor {
         this.actorReviews = actorReviews;
     }
 
-    public Set<Movie> getMovies() {
-        return movies;
+    public List<ActorMovie> getActorMovies() {
+        return actorMovies;
     }
 
-    public void setMovies(Set<Movie> movies) {
-        this.movies = movies;
+    public void setActorMovies(List<ActorMovie> actorMovies) {
+        this.actorMovies = actorMovies;
     }
 }
