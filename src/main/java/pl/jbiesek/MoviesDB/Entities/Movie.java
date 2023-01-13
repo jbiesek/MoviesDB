@@ -46,12 +46,16 @@ public class Movie {
     @JsonIgnoreProperties("directorsList")
     private Director director;
 
-    @ManyToMany(mappedBy = "movies", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JsonIgnoreProperties("movies")
-    private Set<Actor> actors = new LinkedHashSet<>();
+    @OneToMany(
+            mappedBy = "movie",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
+    @JsonIgnoreProperties("movie")
+    private List<ActorMovie> actorMovies = new ArrayList<>();
 
-    public Movie(int id, String title, int year, int duration, String country, String description, Director director) {
-        this.id = id;
+    public Movie(String title, int year, int duration, String country, String description, Director director) {
         this.title = title;
         this.year = year;
         this.duration = duration;
@@ -60,7 +64,7 @@ public class Movie {
         this.director = director;
     }
 
-    public Movie(String title, int year, int duration, String country, String description, List<MovieReview> movieReviews, Director director, Set<Actor> actors) {
+    public Movie(String title, int year, int duration, String country, String description, List<MovieReview> movieReviews, Director director, List<ActorMovie> actorMovies) {
         this.title = title;
         this.year = year;
         this.duration = duration;
@@ -68,7 +72,7 @@ public class Movie {
         this.description = description;
         this.movieReviews = movieReviews;
         this.director = director;
-        this.actors = actors;
+        this.actorMovies = actorMovies;
     }
 
     public int getId() {
@@ -135,11 +139,11 @@ public class Movie {
         this.director = director;
     }
 
-    public Set<Actor> getActors() {
-        return actors;
+    public List<ActorMovie> getActorMovies() {
+        return actorMovies;
     }
 
-    public void setActors(Set<Actor> actors) {
-        this.actors = actors;
+    public void setActorMovies(List<ActorMovie> actorMovies) {
+        this.actorMovies = actorMovies;
     }
 }
