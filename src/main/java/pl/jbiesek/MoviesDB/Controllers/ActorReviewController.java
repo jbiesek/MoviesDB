@@ -31,5 +31,42 @@ public class ActorReviewController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PutMapping("/actorReview/{id}")
+    public ResponseEntity<Void> update(@PathVariable("id") int id, @RequestBody ActorReview updatedActorReview) {
+        ActorReview actorReview = actorReviewRepository.getReferenceById(id);
+        if (updatedActorReview.getDate_added() != null) {
+            actorReview.setDate_added(updatedActorReview.getDate_added());
+        }
+        if (updatedActorReview.getTitle() != null) {
+            actorReview.setTitle(updatedActorReview.getTitle());
+        }
+        if (updatedActorReview.getDescription() != null) {
+            actorReview.setDescription(updatedActorReview.getDescription());
+        }
+        if (updatedActorReview.getRating() >= 0 && updatedActorReview.getRating() <= 10) {
+            actorReview.setRating(updatedActorReview.getRating());
+        }
+        if (updatedActorReview.getActor() != null) {
+            actorReview.setActor(updatedActorReview.getActor());
+        }
+        if (updatedActorReview.getUser() != null) {
+            actorReview.setUser(updatedActorReview.getUser());
+        }
+        try {
+            actorReviewRepository.save(actorReview);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
 
+    @DeleteMapping("/actorReview/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") int id) {
+        try {
+            actorReviewRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
 }

@@ -30,4 +30,43 @@ public class MovieReviewController {
         movieReviewRepository.save(movieReview);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @PutMapping("/movieReview/{id}")
+    public ResponseEntity<Void> update(@PathVariable("id") int id, @RequestBody MovieReview updatedMovieReview){
+        MovieReview movieReview = movieReviewRepository.getReferenceById(id);
+        if (updatedMovieReview.getTitle() != null) {
+            movieReview.setTitle(updatedMovieReview.getTitle());
+        }
+        if (updatedMovieReview.getDate_added() != null) {
+            movieReview.setDate_added(updatedMovieReview.getDate_added());
+        }
+        if (updatedMovieReview.getDescription() != null) {
+            movieReview.setDescription(updatedMovieReview.getDescription());
+        }
+        if (updatedMovieReview.getRating() >= 0 && updatedMovieReview.getRating() <= 10) {
+            movieReview.setRating(updatedMovieReview.getRating());
+        }
+        if (updatedMovieReview.getMovie() != null) {
+            movieReview.setMovie(updatedMovieReview.getMovie());
+        }
+        if (updatedMovieReview.getUser() != null) {
+            movieReview.setUser(updatedMovieReview.getUser());
+        }
+        try {
+            movieReviewRepository.save(movieReview);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @DeleteMapping("/movieReview/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") int id) {
+        try {
+            movieReviewRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
 }
