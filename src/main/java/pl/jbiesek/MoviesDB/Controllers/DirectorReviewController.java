@@ -22,7 +22,11 @@ public class DirectorReviewController {
 
     @GetMapping("/directorReview/{id}")
     public DirectorReview getById(@PathVariable("id") int id) {
-        return directorReviewRepository.getReferenceById(id);
+        if (directorReviewRepository.findById(id).isPresent()) {
+            return directorReviewRepository.findById(id).get();
+        } else {
+            return null;
+        }
     }
 
     @PostMapping("/directorReview")

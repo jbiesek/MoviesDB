@@ -1,5 +1,6 @@
 package pl.jbiesek.MoviesDB.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,29 +32,26 @@ public class User {
 
     @OneToMany(
             mappedBy = "user",
-            cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
-    @JsonIgnoreProperties("user")
+    @JsonIgnore
     private List<ActorReview> actorReviews = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "user",
-            cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
-    @JsonIgnoreProperties("user")
+    @JsonIgnore
     private List<DirectorReview> directorReviews = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "user",
-            cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
-    @JsonIgnoreProperties("user")
+    @JsonIgnore
     private List<MovieReview> movieReviews = new ArrayList<>();
 
     public User(String login, String password, Date date_joined) {
