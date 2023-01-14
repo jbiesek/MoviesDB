@@ -22,7 +22,11 @@ public class MovieController {
 
     @GetMapping("/movie/{id}")
     public Movie getById(@PathVariable("id") int id) {
-        return movieRepository.getReferenceById(id);
+        if (movieRepository.findById(id).isPresent()) {
+            return movieRepository.findById(id).get();
+        } else {
+            return null;
+        }
     }
 
     @PostMapping("/movie")

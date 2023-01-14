@@ -1,5 +1,6 @@
 package pl.jbiesek.MoviesDB.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,14 +17,14 @@ public class ActorMovie {
     @Column(name = "id", updatable = false, unique = true, nullable = false)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id", nullable = false)
-    @JsonIgnoreProperties("moviesList")
+    @JsonIgnore
     private Movie movie;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "actor_id", nullable = false)
-    @JsonIgnoreProperties("actorsList")
+    @JsonIgnore
     private Actor actor;
 
     @Column(name = "role")

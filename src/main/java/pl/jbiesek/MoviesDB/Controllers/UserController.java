@@ -22,7 +22,11 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     public User getById(@PathVariable("id") int id) {
-        return userRepository.getReferenceById(id);
+        if (userRepository.findById(id).isPresent()) {
+            return userRepository.findById(id).get();
+        } else {
+            return null;
+        }
     }
 
     @PostMapping("/user")

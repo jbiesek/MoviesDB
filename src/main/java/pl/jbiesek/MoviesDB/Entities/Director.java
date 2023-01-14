@@ -1,5 +1,6 @@
 package pl.jbiesek.MoviesDB.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,20 +35,18 @@ public class Director {
 
     @OneToMany(
             mappedBy = "director",
-            cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
-    @JsonIgnoreProperties("director")
+    @JsonIgnore
     private List<DirectorReview> directorReviews = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "director",
-            cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
-    @JsonIgnoreProperties("director")
+    @JsonIgnore
     private List<Movie> movies = new ArrayList<>();
 
     public Director(String name, String surname, Date birth_date, String country) {
