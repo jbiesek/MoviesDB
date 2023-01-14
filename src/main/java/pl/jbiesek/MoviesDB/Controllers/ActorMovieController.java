@@ -15,19 +15,49 @@ public class ActorMovieController {
     @Autowired
     ActorMovieRepository actorMovieRepository;
 
-    @GetMapping("/actormovies")
+    @GetMapping("/actorMovies")
     public List<ActorMovie> getAll() {
         return actorMovieRepository.findAll();
     }
 
-    @GetMapping("actormovie/{id}")
+    @GetMapping("actorMovie/{id}")
     public ActorMovie getById(@PathVariable("id") int id) {
         return actorMovieRepository.getReferenceById(id);
     }
 
-    @PostMapping("/actormovie")
+    @PostMapping("/actorMovie")
     public ResponseEntity<Void> add(@RequestBody ActorMovie actorMovie) {
         actorMovieRepository.save(actorMovie);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("/actorMovie/{id}")
+    public ResponseEntity<Void> update(@PathVariable("id") int id, @RequestBody ActorMovie updatedActorMovie) {
+        ActorMovie actorMovie = actorMovieRepository.getReferenceById(id);
+        if (updatedActorMovie.getRole() != null) {
+            actorMovie.setRole(updatedActorMovie.getRole());
+        }
+        if (updatedActorMovie.getActor() != null) {
+            actorMovie.setActor(updatedActorMovie.getActor());
+        }
+        if (updatedActorMovie.getMovie() != null) {
+            actorMovie.setMovie(updatedActorMovie.getMovie());
+        }
+        try {
+            actorMovieRepository.save(actorMovie);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @DeleteMapping("/actorMovie/{id}")
+    public ResponseEntity<Void> delete (@PathVariable("id") int id) {
+        try {
+            actorMovieRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 }

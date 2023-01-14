@@ -30,4 +30,43 @@ public class DirectorReviewController {
         directorReviewRepository.save(directorReview);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @PutMapping("/directorReview/{id}")
+    public ResponseEntity<Void> update (@PathVariable("id") int id, @RequestBody DirectorReview updatedDirectorReview) {
+        DirectorReview directorReview = directorReviewRepository.getReferenceById(id);
+        if (updatedDirectorReview.getDate_added() != null) {
+            directorReview.setDate_added(updatedDirectorReview.getDate_added());
+        }
+        if (updatedDirectorReview.getTitle() != null) {
+            directorReview.setTitle(updatedDirectorReview.getTitle());
+        }
+        if (updatedDirectorReview.getDescription() != null) {
+            directorReview.setDescription(updatedDirectorReview.getDescription());
+        }
+        if (updatedDirectorReview.getRating() >= 0 && updatedDirectorReview.getRating() <= 10) {
+            directorReview.setRating(updatedDirectorReview.getRating());
+        }
+        if (updatedDirectorReview.getDirector() != null) {
+            directorReview.setDirector(updatedDirectorReview.getDirector());
+        }
+        if (updatedDirectorReview.getUser() != null) {
+            directorReview.setUser(updatedDirectorReview.getUser());
+        }
+        try {
+            directorReviewRepository.save(directorReview);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @DeleteMapping("/directorReview/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") int id) {
+        try {
+            directorReviewRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
 }

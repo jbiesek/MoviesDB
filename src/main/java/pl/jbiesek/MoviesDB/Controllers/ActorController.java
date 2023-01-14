@@ -30,4 +30,37 @@ public class ActorController {
         actorRepository.save(actor);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @PutMapping("/actor/{id}")
+    public ResponseEntity<Void> update(@PathVariable("id") int id, @RequestBody Actor updatedActor){
+        Actor actor = actorRepository.getReferenceById(id);
+        if (updatedActor.getName() != null) {
+            actor.setName(updatedActor.getName());
+        }
+        if (updatedActor.getSurname() != null) {
+            actor.setSurname(updatedActor.getSurname());
+        }
+        if (updatedActor.getBirth_date() != null) {
+            actor.setBirth_date(updatedActor.getBirth_date());
+        }
+        if (updatedActor.getCountry() != null) {
+            actor.setCountry(updatedActor.getCountry());
+        }
+        try {
+            actorRepository.save(actor);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (IllegalArgumentException e){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @DeleteMapping("/actor/{id}")
+    public ResponseEntity<Void> delete (@PathVariable("id") int id) {
+        try {
+            actorRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }
 }
