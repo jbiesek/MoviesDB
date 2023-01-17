@@ -67,4 +67,25 @@ public class ActorController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
     }
+
+    @GetMapping("/actor/byReview/{id}")
+    public Actor getActorByReview(@PathVariable("id") int id) {
+        return actorRepository.getActorByReview(id);
+    }
+
+    @GetMapping("/actors/byUser/{id}")
+    public List<Actor> getActorsByUser(@PathVariable("id") int id) {
+        return actorRepository.getActorsByUser(id);
+    }
+
+    @GetMapping("/actors/byMovie/{id}")
+    public List<Actor> getActorsByMovie(@PathVariable("id") int id) {
+        return actorRepository.getActorsByMovie(id);
+    }
+
+    // i'm not sure if usage of object is correct, although it kinda works
+    @GetMapping("/actors/byMovieWithRole/{id}")
+    public List<Object> getActorsByMovieWithRole(@PathVariable("id") int id) {
+        return actorRepository.getActorsByMovieWithRole(id);
+    }
 }

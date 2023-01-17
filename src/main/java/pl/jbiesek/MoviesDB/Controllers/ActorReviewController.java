@@ -1,6 +1,7 @@
 package pl.jbiesek.MoviesDB.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -72,5 +73,20 @@ public class ActorReviewController {
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+    }
+
+    @GetMapping("/actorReview/byActor/{id}")
+    public List<ActorReview> getActorReviewByActorId(@PathVariable("id") int id) {
+        return actorReviewRepository.getReviewByActorId(id);
+    }
+
+    @GetMapping("/actorReview/byUser/{id}")
+    public List<ActorReview> getActorReviewByUserId(@PathVariable("id") int id) {
+        return actorReviewRepository.getReviewByUserId(id);
+    }
+
+    @GetMapping("/actorReview/getRating/{id}")
+    public float getActorRating(@PathVariable("id") int id) {
+        return actorReviewRepository.getActorRating(id);
     }
 }

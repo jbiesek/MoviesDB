@@ -73,4 +73,19 @@ public class DirectorReviewController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+
+    @GetMapping("/directorReviews/byDirector/{id}")
+    public List<DirectorReview> getReviewsByDirector (@PathVariable("id") int id) {
+        return directorReviewRepository.getReviewByDirector(id);
+    }
+
+    @GetMapping("/directorReviews/byUser/{id}")
+    public List<DirectorReview> getReviewsByUser(@PathVariable("id") int id) {
+        return directorReviewRepository.getReviewByUser(id);
+    }
+
+    @GetMapping("/directorReview/getRating/{id}")
+    public float getDirectorRating(@PathVariable("id") int id) {
+        return directorReviewRepository.getDirectorRating(id);
+    }
 }

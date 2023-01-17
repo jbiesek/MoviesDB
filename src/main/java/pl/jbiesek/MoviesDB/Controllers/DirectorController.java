@@ -67,4 +67,20 @@ public class DirectorController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+
+    @GetMapping("/director/byReview/{id}")
+    public Director getDirectorById(@PathVariable("id") int id) {
+        return directorRepository.getDirectorByReview(id);
+    }
+
+    @GetMapping("/directors/byUser/{id}")
+    public List<Director> getDirectorsByUser(@PathVariable("id") int id) {
+        return directorRepository.getDirectorsByUser(id);
+    }
+
+    @GetMapping("/director/byMovie/{id}")
+    public Director getDirectorByMovie(@PathVariable("id") int id) {
+        return directorRepository.getDirectorByMovie(id);
+    }
+
 }

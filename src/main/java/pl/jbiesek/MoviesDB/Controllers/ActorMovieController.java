@@ -64,4 +64,9 @@ public class ActorMovieController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+
+    @GetMapping("actorMovie/role/{id1}/{id2}")
+    public String getRoleByActorIdMovieId (@PathVariable("id1") int id1, @PathVariable("id2") int id2){
+        return actorMovieRepository.getRoleByActorAndMovie(id1, id2);
+    }
 }

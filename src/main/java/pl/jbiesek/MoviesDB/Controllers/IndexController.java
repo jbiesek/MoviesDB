@@ -54,26 +54,26 @@ public class IndexController {
         // password : Zuz!a1337
         User u4 = new User("zuzanna123", "09cf7f67d7645a0f7d5b64121cd84cea5a36ea88f96000eaebdd01699a5e5795829f47cc9bca70a78b566d6c31c755570840d436eee255781a0d86c60eba3cdb", date_now);
 
-        Actor a0 = new Actor("Robert", "De Niro", new Date(1942, 8, 17), "USA");
-        Actor a1 = new Actor("Ray", "Liotta", new Date(1954, 12, 18),"USA");
-        Actor a2 = new Actor("Joe", "Pesci", new Date(1943, 2, 9), "USA");
-        Actor a3 = new Actor("Al", "Pacino", new Date(1940, 4, 25), "USA");
-        Actor a4 = new Actor("Michelle", "Pfeiffer", new Date(1958, 4, 29), "USA");
-        Actor a5 = new Actor("Johnny", "Deep", new Date(1963, 6, 9), "USA");
-        Actor a6 = new Actor("Brad", "Pitt", new Date(1963, 12, 18), "USA");
-        Actor a7 = new Actor("Angelina", "Jolie", new Date(1975,6,4), "USA");
-        Actor a8 = new Actor("Morgan", "Freeman", new Date(1937,6,1), "USA");
-        Actor a9 = new Actor("Winona", "Ryder", new Date(1971, 10, 29), "USA");
-        Actor a10 = new Actor("Edward", "Norton", new Date(1969, 8, 18), "USA");
+        Actor a0 = new Actor("Robert", "De Niro", new Date(42, 8, 17), "USA");
+        Actor a1 = new Actor("Ray", "Liotta", new Date(54, 12, 18),"USA");
+        Actor a2 = new Actor("Joe", "Pesci", new Date(43, 2, 9), "USA");
+        Actor a3 = new Actor("Al", "Pacino", new Date(40, 4, 25), "USA");
+        Actor a4 = new Actor("Michelle", "Pfeiffer", new Date(58, 4, 29), "USA");
+        Actor a5 = new Actor("Johnny", "Deep", new Date(63, 6, 9), "USA");
+        Actor a6 = new Actor("Brad", "Pitt", new Date(63, 12, 18), "USA");
+        Actor a7 = new Actor("Angelina", "Jolie", new Date(75,6,4), "USA");
+        Actor a8 = new Actor("Morgan", "Freeman", new Date(37,6,1), "USA");
+        Actor a9 = new Actor("Winona", "Ryder", new Date(71, 10, 29), "USA");
+        Actor a10 = new Actor("Edward", "Norton", new Date(69, 8, 18), "USA");
 
-        Director d0 = new Director("Martin", "Scorsese", new Date(1942, 11, 17), "USA");
-        Director d1 = new Director("Francis", "Ford Coppola", new Date(1939, 4, 7), "USA");
-        Director d2 = new Director("Brian", "De Palma", new Date(1940, 9, 11), "USA");
-        Director d3 = new Director("Mike", "Newell", new Date(1942, 3, 28), "USA");
-        Director d4 = new Director("Doug", "Liman", new Date(1965, 7, 24), "USA");
-        Director d5 = new Director("David", "Fincher", new Date(1962, 8, 28), "USA");
-        Director d6 = new Director("James", "Mangold", new Date(1963, 12, 16), "USA");
-        Director d7 = new Director("Tim", "Burton", new Date(1958, 8, 25), "USA");
+        Director d0 = new Director("Martin", "Scorsese", new Date(42, 11, 17), "USA");
+        Director d1 = new Director("Francis", "Ford Coppola", new Date(39, 4, 7), "USA");
+        Director d2 = new Director("Brian", "De Palma", new Date(40, 9, 11), "USA");
+        Director d3 = new Director("Mike", "Newell", new Date(42, 3, 28), "USA");
+        Director d4 = new Director("Doug", "Liman", new Date(65, 7, 24), "USA");
+        Director d5 = new Director("David", "Fincher", new Date(62, 8, 28), "USA");
+        Director d6 = new Director("James", "Mangold", new Date(63, 12, 16), "USA");
+        Director d7 = new Director("Tim", "Burton", new Date(58, 8, 25), "USA");
 
         Movie m0 = new Movie("Chłopcy z ferajny",1990,146,"USA","Kilkunastoletni Henry i Tommy DeVito trafiają pod opiekę potężnego gangstera. Obaj szybko uczą się panujących w mafii reguł.",d0);
         Movie m1 = new Movie("Ojciec chrzestny II", 1974, 200, "USA", "Rok 1917. Młody Vito Corleone stawia pierwsze kroki w mafijnym świecie Nowego Jorku. Ponad 40 lat później jego syn Michael walczy o interesy i dobro rodziny.", d1);
