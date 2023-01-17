@@ -64,4 +64,24 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+
+    @GetMapping("/user/byLogin")
+    public User getUserByLogin(@RequestParam String login) {
+        return userRepository.getUserByLogin(login);
+    }
+
+    @GetMapping("/user/byMovie/{id}")
+    public List<String> getUserLoginByMovie(@PathVariable("id") int id) {
+        return userRepository.getUserLoginByMovie(id);
+    }
+
+    @GetMapping("/user/byActor/{id}")
+    public List<String> getUserLoginByActor(@PathVariable("id") int id) {
+        return userRepository.getUserLoginByActor(id);
+    }
+
+    @GetMapping("/user/byDirector/{id}")
+    public List<String> getUserLoginByDirector(@PathVariable("id") int id) {
+        return userRepository.getUserLoginByDirector(id);
+    }
 }

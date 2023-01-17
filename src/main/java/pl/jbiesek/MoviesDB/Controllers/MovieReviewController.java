@@ -73,4 +73,19 @@ public class MovieReviewController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+
+    @GetMapping("/movieReviews/byMovie/{id}")
+    public List<MovieReview> getReviewsByMovie(@PathVariable("id") int id) {
+        return movieReviewRepository.getReviewsByMovie(id);
+    }
+
+    @GetMapping("/movieReviews/byUser/{id}")
+    public List<MovieReview> getReviewsByUser(@PathVariable("id") int id) {
+        return movieReviewRepository.getReviewsByUser(id);
+    }
+
+    @GetMapping("/movieReviews/getRating/{id}")
+    public float getMovieRating (@PathVariable("id") int id) {
+        return movieReviewRepository.getMovieRating(id);
+    }
 }

@@ -73,4 +73,24 @@ public class MovieController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+
+    @GetMapping("/movies/byActor/{id}")
+    public List<Movie> getMoviesByActor(@PathVariable("id") int id) {
+        return movieRepository.getMoviesByActor(id);
+    }
+
+    @GetMapping("/movies/byActorWithRole/{id}")
+    public List<Object> getMoviesByActorWithRole(@PathVariable("id") int id) {
+        return movieRepository.getMoviesByActorWithRole(id);
+    }
+
+    @GetMapping("/movies/byDirector/{id}")
+    public List<Movie> getMoviesByDirector(@PathVariable("id") int id) {
+        return movieRepository.getMoviesByDirector(id);
+    }
+
+    @GetMapping("/movies/byUser/{id}")
+    public List<Movie> getMoviesByUser(@PathVariable("id") int id) {
+        return movieRepository.getMoviesByUser(id);
+    }
 }
