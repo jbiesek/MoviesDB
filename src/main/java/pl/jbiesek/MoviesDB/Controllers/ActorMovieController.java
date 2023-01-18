@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.jbiesek.MoviesDB.Entities.ActorMovie;
+import pl.jbiesek.MoviesDB.Entities.*;
 import pl.jbiesek.MoviesDB.Repositories.ActorMovieRepository;
+import pl.jbiesek.MoviesDB.Repositories.ActorRepository;
+import pl.jbiesek.MoviesDB.Repositories.MovieRepository;
 
 import java.util.List;
 
@@ -14,6 +16,12 @@ public class ActorMovieController {
 
     @Autowired
     ActorMovieRepository actorMovieRepository;
+
+    @Autowired
+    MovieRepository movieRepository;
+
+    @Autowired
+    ActorRepository actorRepository;
 
     @GetMapping("/actorMovies")
     public List<ActorMovie> getAll() {
@@ -31,6 +39,26 @@ public class ActorMovieController {
 
     @PostMapping("/actorMovie")
     public ResponseEntity<Void> add(@RequestBody ActorMovie actorMovie) {
+        actorMovieRepository.save(actorMovie);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/actorMovie/{actorId}/{movieId}")
+    public ResponseEntity<Void> addWithMovieAndActor(@RequestBody ActorMovie actorMovie, @PathVariable("movieId") int movieId, @PathVariable("actorId") int actorId){
+        Movie movie;
+        if (movieRepository.findById(movieId).isPresent()) {
+            movie = movieRepository.findById(movieId).get();
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        actorMovie.setMovie(movie);
+        Actor actor;
+        if (actorRepository.findById(actorId).isPresent()) {
+            actor = actorRepository.findById(actorId).get();
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        actorMovie.setActor(actor);
         actorMovieRepository.save(actorMovie);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
