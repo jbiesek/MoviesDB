@@ -4,8 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.jbiesek.MoviesDB.Entities.Movie;
 import pl.jbiesek.MoviesDB.Entities.MovieReview;
+import pl.jbiesek.MoviesDB.Entities.User;
+import pl.jbiesek.MoviesDB.Repositories.MovieRepository;
 import pl.jbiesek.MoviesDB.Repositories.MovieReviewRepository;
+import pl.jbiesek.MoviesDB.Repositories.UserRepository;
 
 import java.util.List;
 
@@ -14,6 +18,12 @@ public class MovieReviewController {
 
     @Autowired
     MovieReviewRepository movieReviewRepository;
+
+    @Autowired
+    MovieRepository movieRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping("/movieReviews")
     public List<MovieReview> getAll() {
@@ -31,6 +41,26 @@ public class MovieReviewController {
 
     @PostMapping("/movieReview")
     public ResponseEntity<Void> add(@RequestBody MovieReview movieReview) {
+        movieReviewRepository.save(movieReview);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/movieReview/{movieId}/{userId}")
+    public ResponseEntity<Void> addWithMovie(@RequestBody MovieReview movieReview, @PathVariable("movieId") int movieId, @PathVariable("userId") int userId){
+        Movie movie;
+        if (movieRepository.findById(movieId).isPresent()) {
+            movie = movieRepository.findById(movieId).get();
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        movieReview.setMovie(movie);
+        User user;
+        if (userRepository.findById(userId).isPresent()) {
+            user = userRepository.findById(userId).get();
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        movieReview.setUser(user);
         movieReviewRepository.save(movieReview);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

@@ -7,7 +7,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
+import pl.jbiesek.MoviesDB.Entities.Director;
 import pl.jbiesek.MoviesDB.Entities.Movie;
+import pl.jbiesek.MoviesDB.Repositories.DirectorRepository;
 import pl.jbiesek.MoviesDB.Repositories.MovieRepository;
 
 import java.io.IOException;
@@ -18,6 +20,9 @@ public class MovieController {
 
     @Autowired
     MovieRepository movieRepository;
+
+    @Autowired
+    DirectorRepository directorRepository;
 
     @GetMapping("/movies")
     public List<Movie> getAll() {
@@ -35,6 +40,19 @@ public class MovieController {
 
     @PostMapping("/movie")
     public ResponseEntity<Void> add(@RequestBody Movie movie){
+        movieRepository.save(movie);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/movie/{directorId}")
+    public ResponseEntity<Void> addWithDirector(@RequestBody Movie movie, @PathVariable("directorId") int id){
+        Director director;
+        if (directorRepository.findById(id).isPresent()) {
+            director = directorRepository.findById(id).get();
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        movie.setDirector(director);
         movieRepository.save(movie);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
