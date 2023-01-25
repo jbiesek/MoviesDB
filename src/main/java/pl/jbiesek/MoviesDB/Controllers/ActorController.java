@@ -1,106 +1,84 @@
 package pl.jbiesek.MoviesDB.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import pl.jbiesek.MoviesDB.Entities.Actor;
-import pl.jbiesek.MoviesDB.Repositories.ActorRepository;
+import pl.jbiesek.MoviesDB.Services.ActorService;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
 public class ActorController {
 
     @Autowired
-    ActorRepository actorRepository;
+    ActorService actorService;
 
     @GetMapping("/actors")
     public List<Actor> getAll() {
-        return actorRepository.findAll();
+        return actorService.getAll();
     }
 
     @GetMapping("actor/{id}")
     public Actor getById(@PathVariable("id") int id) {
-        if (actorRepository.findById(id).isPresent()) {
-            return actorRepository.findById(id).get();
-        } else {
-            return null;
-        }
+        return actorService.getById(id);
     }
 
     @PostMapping("/actor")
     public ResponseEntity<Void> add(@RequestBody Actor actor) {
-        actorRepository.save(actor);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        if(actorService.add(actor)) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
     }
 
     @PutMapping("/actor/{id}")
     public ResponseEntity<Void> update(@PathVariable("id") int id, @RequestBody Actor updatedActor){
-        Actor actor = actorRepository.getReferenceById(id);
-        if (updatedActor.getName() != null) {
-            actor.setName(updatedActor.getName());
-        }
-        if (updatedActor.getSurname() != null) {
-            actor.setSurname(updatedActor.getSurname());
-        }
-        if (updatedActor.getBirth_date() != null) {
-            actor.setBirth_date(updatedActor.getBirth_date());
-        }
-        if (updatedActor.getCountry() != null) {
-            actor.setCountry(updatedActor.getCountry());
-        }
-        try {
-            actorRepository.save(actor);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (IllegalArgumentException e){
+        if(actorService.update(id, updatedActor)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
     @DeleteMapping("/actor/{id}")
     public ResponseEntity<Void> delete (@PathVariable("id") int id) {
-        try {
-            actorRepository.deleteById(id);
+        if(actorService.delete(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
     @GetMapping("/actor/byReview/{id}")
     public Actor getActorByReview(@PathVariable("id") int id) {
-        return actorRepository.getActorByReview(id);
+        return actorService.getActorByReview(id);
     }
 
     @GetMapping("/actors/byUser/{id}")
     public List<Actor> getActorsByUser(@PathVariable("id") int id) {
-        return actorRepository.getActorsByUser(id);
+        return actorService.getActorsByUser(id);
     }
 
     @GetMapping("/actors/byMovie/{id}")
     public List<Actor> getActorsByMovie(@PathVariable("id") int id) {
-        return actorRepository.getActorsByMovie(id);
+        return actorService.getActorsByMovie(id);
     }
 
     // i'm not sure if usage of object is correct, although it kinda works
     @GetMapping("/actors/byMovieWithRole/{id}")
     public List<Object> getActorsByMovieWithRole(@PathVariable("id") int id) {
-        return actorRepository.getActorsByMovieWithRole(id);
+        return actorService.getActorsByMovieWithRole(id);
     }
 
     @RequestMapping(value = "/actor/image/{id}", method = RequestMethod.GET,
             produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable("id") int id) throws IOException {
-        String imgPath = "Images/Actor/" + id + ".jpg";
-        var imgFile = new ClassPathResource(imgPath);
-        byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
+        byte[] bytes = actorService.getImage(id);
 
         return ResponseEntity
                 .ok()
