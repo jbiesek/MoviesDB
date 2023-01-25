@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.jbiesek.MoviesDB.Entities.User;
-import pl.jbiesek.MoviesDB.Repositories.UserRepository;
+import pl.jbiesek.MoviesDB.Services.UserService;
 
 import java.util.List;
 
@@ -13,75 +13,59 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @GetMapping("/users")
     public List<User> getAll() {
-        return userRepository.findAll();
+        return userService.getAll();
     }
 
     @GetMapping("/user/{id}")
     public User getById(@PathVariable("id") int id) {
-        if (userRepository.findById(id).isPresent()) {
-            return userRepository.findById(id).get();
-        } else {
-            return null;
-        }
+        return userService.getById(id);
     }
 
     @PostMapping("/user")
-    public ResponseEntity<Void> add (@RequestBody User user){
-        userRepository.save(user);
+    public ResponseEntity<Void> add(@RequestBody User user) {
+        userService.add(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<Void> update (@PathVariable("id") int id, @RequestBody User updatedUser) {
-        User user = userRepository.getReferenceById(id);
-        if (updatedUser.getLogin() != null) {
-            user.setLogin(updatedUser.getLogin());
-        }
-        if (updatedUser.getPassword() != null) {
-            user.setPassword(updatedUser.getPassword());
-        }
-        if (updatedUser.getDate_joined() != null) {
-            user.setDate_joined(updatedUser.getDate_joined());
-        }
-        try {
-            userRepository.save(user);
+    public ResponseEntity<Void> update(@PathVariable("id") int id, @RequestBody User updatedUser) {
+        if (userService.update(id, updatedUser)) {
             return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
+        } else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
     @DeleteMapping("/user/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") int id) {
-        try {
-            userRepository.deleteById(id);
+        if (userService.delete(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
+        } else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
     @GetMapping("/user/byLogin")
     public User getUserByLogin(@RequestParam String login) {
-        return userRepository.getUserByLogin(login);
+        return userService.getUserByLogin(login);
     }
 
     @GetMapping("/user/byMovie/{id}")
     public List<String> getUserLoginByMovie(@PathVariable("id") int id) {
-        return userRepository.getUserLoginByMovie(id);
+        return userService.getUserLoginByMovie(id);
     }
 
     @GetMapping("/user/byActor/{id}")
     public List<String> getUserLoginByActor(@PathVariable("id") int id) {
-        return userRepository.getUserLoginByActor(id);
+        return userService.getUserLoginByActor(id);
     }
 
     @GetMapping("/user/byDirector/{id}")
     public List<String> getUserLoginByDirector(@PathVariable("id") int id) {
-        return userRepository.getUserLoginByDirector(id);
+        return userService.getUserLoginByDirector(id);
     }
 }

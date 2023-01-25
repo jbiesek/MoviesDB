@@ -1,14 +1,12 @@
 package pl.jbiesek.MoviesDB.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import pl.jbiesek.MoviesDB.Entities.Director;
-import pl.jbiesek.MoviesDB.Repositories.DirectorRepository;
+import pl.jbiesek.MoviesDB.Services.DirectorService;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,82 +15,61 @@ import java.util.List;
 public class DirectorController {
 
     @Autowired
-    DirectorRepository directorRepository;
+    DirectorService directorService;
 
     @GetMapping("/directors")
-    public List<Director> getAll(){
-        return directorRepository.findAll();
+    public List<Director> getAll() {
+        return directorService.getAll();
     }
 
     @GetMapping("/director/{id}")
-    public Director getById(@PathVariable("id") int id){
-        if (directorRepository.findById(id).isPresent()) {
-            return directorRepository.findById(id).get();
-        } else {
-            return null;
-        }
+    public Director getById(@PathVariable("id") int id) {
+        return directorService.getById(id);
     }
 
     @PostMapping("/director")
-    public ResponseEntity<Void> add(@RequestBody Director director){
-        directorRepository.save(director);
+    public ResponseEntity<Void> add(@RequestBody Director director) {
+        directorService.add(director);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/director/{id}")
     public ResponseEntity<Void> update(@PathVariable("id") int id, @RequestBody Director updatedDirector) {
-        Director director = directorRepository.getReferenceById(id);
-        if (updatedDirector.getName() != null) {
-            director.setName(updatedDirector.getName());
-        }
-        if (updatedDirector.getSurname() != null) {
-            director.setSurname(updatedDirector.getSurname());
-        }
-        if (updatedDirector.getCountry() != null) {
-            director.setCountry(updatedDirector.getCountry());
-        }
-        if (updatedDirector.getBirth_date() != null) {
-            director.setBirth_date(updatedDirector.getBirth_date());
-        }
-        try {
-            directorRepository.save(director);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
+        if (directorService.update(id, updatedDirector)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
     @DeleteMapping("/director/{id}")
-    public ResponseEntity<Void> delete (@PathVariable("id") int id) {
-        try {
-            directorRepository.deleteById(id);
+    public ResponseEntity<Void> delete(@PathVariable("id") int id) {
+        if (directorService.delete(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
+        } else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
     @GetMapping("/director/byReview/{id}")
     public Director getDirectorById(@PathVariable("id") int id) {
-        return directorRepository.getDirectorByReview(id);
+        return directorService.getDirectorById(id);
     }
 
     @GetMapping("/directors/byUser/{id}")
     public List<Director> getDirectorsByUser(@PathVariable("id") int id) {
-        return directorRepository.getDirectorsByUser(id);
+        return directorService.getDirectorsByUser(id);
     }
 
     @GetMapping("/director/byMovie/{id}")
     public Director getDirectorByMovie(@PathVariable("id") int id) {
-        return directorRepository.getDirectorByMovie(id);
+        return directorService.getDirectorByMovie(id);
     }
 
     @RequestMapping(value = "/director/image/{id}", method = RequestMethod.GET,
             produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable("id") int id) throws IOException {
-        String imgPath = "Images/Director/" + id + ".jpg";
-        var imgFile = new ClassPathResource(imgPath);
-        byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
+        byte[] bytes = directorService.getImage(id);
 
         return ResponseEntity
                 .ok()
